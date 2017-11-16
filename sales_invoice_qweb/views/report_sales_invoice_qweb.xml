@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="sale.report_invoice_document_inherit_sale" inherit_id="account.report_invoice_document">
+</template>
+
+<template id="sale_stock.report_invoice_document_inherit_sale_stock" inherit_id="account.report_invoice_document">
+</template>
+
+<template id="account.report_invoice_document">
+    <div class="header">
+        <table style="width:100%" class="mt32 mb35 table-condensed">
+          <tr>
+            <td width="30%">
+              <img  t-if="o.company_id.logo and o.type == 'in_invoice'" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height:95px;"/>
+            </td>
+            <td width="50%">
+                <span class="title"><t t-esc="o.company_id.company_registry"/></span><br/>  
+                Cédula Jurídica <t t-esc="o.company_id.vat"/><br/>
+                <t t-if="o.company_id.street" t-esc="o.company_id.street"/><br/>
+                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                <span>Tel.</span> <t t-esc="o.company_id.phone"/><br/>
+                <span>Email:</span> <t t-esc="o.company_id.email"/><br/>
+                <t t-esc="o.company_id.website"/><br/><br/>                   
+            </td>
+            <td width="20%">
+              <div class="text-left">
+                  <h2><span style="font-weight:bolder;font-size:22px" t-if="o.type == 'out_invoice' or o.type == 'in_invoice'">FACTURA</span>
+                    <span style="font-weight:bolder;font-size:20px" t-if="o.type == 'out_refund' or o.type == 'in_refund'">NOTA CRÉDITO</span><br/>
+                    <span style="font-weight:bolder;font-size:20px">No. <span t-esc="(o.type == 'in_invoice' and o.reference) or o.number"/></span>
+                  </h2>
+              </div>
+              <div class="text-center">
+                <table style="width:90%;" class="dtheader rounded2">
+                  <tr>
+                    <td class="text-center">DÍA</td>
+                    <td class="text-center">MES</td>
+                    <td class="text-center">AÑO</td>
+                  </tr>
+                  <tr>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[8:10]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[5:7]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_invoice and (o.date_invoice[0:4]) or ''"/></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+        <style type="text/css">
+            <![CDATA[
+                body {
+                    font-family: 'Droid Sans', Arial, sans-serif;
+                    font-size:16px;
+
+                }
+            ]]>
+            .title{
+            color:#222222;
+            font-size:24px;
+            font-weight:bolder;
+            }
+            .rounded2{
+              border-radius: 8px;
+              border: 1px solid;
+              padding:5px 5px;
+            }
+            .dtheader{
+              border: 1px solid;
+              padding:5px 5px;
+            }
+            .dtcls{
+              width:33.33%;
+              padding:5px 5px;
+              border: 1px solid;
+            }
+            .dtbg{
+            margin:5px 5px; 
+            }
+        </style>
+    </div><!---//end header-->
+    <div class="page" style="height:210mm;width:100%"> 
+                <div name="invoice_address" class="col-xs-5 col-xs-offset-7">
+                </div>
+
+        <table style="width:100%" class="mt30 mb30">
+            <thead>
+                <tr>
+                    <th width="15%"></th>
+                    <th width="40%"></th>
+                    <th width="20%"></th>
+                    <th width="25%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr >
+                    <td>
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+                            <strong>PROVEEDOR:</strong>
+                        </span>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <strong>CLIENTE:</strong>
+                        </span>
+                    </td>
+                    <td colspan="3">
+                          <t t-if="o.partner_id.parent_id">
+                              <strong><span style="font-size:20px" t-field="o.partner_id.parent_id.name"/><br/></strong>
+                          </t>
+                          <strong><span style="font-size:20px" t-field="o.partner_id.name"/></strong>
+                    </td>
+                </tr>
+                <tr >
+                    <td>
+                        <strong>CÉDULA JURÍDICA:</strong>
+                    </td>
+                    <td>
+                        <span t-field="o.partner_id.ref"/>
+                    </td>
+                    <td>
+                        <strong>PLAZO:</strong>
+                    </td>
+                    <td>
+                        <span t-esc="o.payment_term_id and o.payment_term_id.name or 'CONTADO'"/>
+                    </td>
+                </tr>
+                <tr >
+                    <td>
+                        <strong>TELÉFONO:</strong>
+                    </td>
+                    <td>
+                        <span t-field="o.partner_id.phone"/>
+                    </td>
+                    <td>
+                        <strong>FECHA VENCE:</strong>
+                    </td>
+                    <td>
+                        <span t-field="o.date_due"/>
+                    </td>
+                </tr>
+
+                <tr >
+                    <td>
+                        <strong>DIRECCIÓN:</strong>
+                    </td>
+                    <td>
+                        <span t-field="o.partner_id.street"/>
+                    </td>
+                    <td>
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+                            <strong >FACTURA INTERNA:</strong><br/>
+                            <strong>USUARIO:</strong>
+                        </span>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <strong >ORDEN DE COMPRA:</strong><br/>
+                            <strong>VENDEDOR:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+                            <span t-field="o.number"/>-<span t-field="o.origin"/><br/>
+                            <span t-field="o.create_uid.name"/>
+                        </span>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <span t-field="o.name"/>-<span t-field="o.origin"/><br/>
+                            <span t-field="o.user_id.name"/>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div name="reference"/>
+        <br/>
+            <!-- Is there a discount on at least one line? -->
+            <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+
+        <div class="tble-wrapper">
+          <div class="content mt10 bg-img">
+            <table cellspacing="0" style="height:110mm;width:100%;" class="tble">
+              <thead class="bb bt">
+                    <tr>
+                        <th >Producto</th>
+                        <th class="hidden">Source Document</th>
+                        <th class="text-right">Cant.</th>
+                        <th class="text-right">Precio</th>
+                        <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
+                        <th class="text-right">IV</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.invoice_line_ids" t-as="l" style="height:25px;font-size:16px" >
+                        <td><span t-field="l.name"/></td>
+                        <td class="hidden"><span t-field="l.origin"/></td>
+                        <td class="text-right">
+                            <span t-field="l.quantity"/>
+                            <span t-field="l.uom_id" groups="product.group_uom"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_unit"/>
+                        </td>
+                        <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+                            <span t-field="l.discount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-if="l.invoice_line_tax_ids" t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                            <span t-if="not l.invoice_line_tax_ids">EXE</span>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                    </tr>
+                    <tr style="height:25px;">
+                        <td colspan="6" class="text-center">
+                            ********** Ultima Línea **********
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" />
+                    </tr>
+                </tbody>
+            </table>
+
+            <t t-if="o.comment" class="text-center" style="height:25px;">
+                <span class="text-center">
+                    NOTAS:<span t-field="o.comment"/>
+                </span>
+            </t>
+
+          </div>
+
+            <div class="row">
+            
+                <div class="col-xs-8">
+                    <t t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td style="width:60%" class="text-left">
+                                  <p style="padding:2px;text-align:justify;">
+                                  PRECIOS FACTURADOS Y PAGADEROS EN LA MISMA MONEDA. 
+                                  ESTA FACTURA DEVENGARA INTERESES DEL 3% MENSUAL DESPUES DE SU VENCIMIENTO, 
+                                  EL DEUDOR REUNCIA SU DOMICILIO Y LOS REQUERIMIENTOS DE PAGO Y TRAMITES DE JUCIO 
+                                  Y DA POR ACEPTADAS LAS CONDICIONES DEL CODIGO DE COMERCIO SEGUN EL ARTICULO 460. 
+                                  NO SE ACEPTAN DEVOLUCIONES DESPUES DE 30 DIAS DE RECIBIDA LA MERCADERIA.
+                                  </p>
+                                </td>
+                                <td style="width:15%" class="bl text-left">
+                                  <div style="padding:2px 2px;">
+                                      <p><br/><br/>Nombre:<br/><br/><br/>
+                                        No.Cédula:<br/><br/><br/>
+                                        Firma:</p> 
+                                  </div>
+                                </td>
+                                <td style="width:25%" class="text-left">
+                                  <div style="padding:2px 2px;">
+                                      <p><br/><br/>_____________________________<br/><br/><br/>
+                                        _____________________________<br/><br/><br/>
+                                        _____________________________</p> 
+                                  </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+              </div>
+            
+            
+                <div class="col-xs-4">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td><strong>Subtotal</strong><br/></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impuesto</strong></td>
+                            <td class="text-right">
+                                <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+                                    <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr class="border-black">
+                            <td><strong>Total</strong><br/></td>
+                            <td class="text-right">
+                                 <strong><span style="font-size:18px" t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></strong>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row" t-if="len(o.tax_line_ids) &gt; 1">
+                <div class="col-xs-6">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Tax</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.tax_line_ids" t-as="t">
+                                <td><span t-field="t.tax_id.description"/></td>
+                                <td class="text-right">
+                                    <span t-field="t.amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--End tbl-wrapped-->
+        <t t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+            <div class="rounded2">
+                <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+                    <tr class="text-center">
+                        <td width="34%"><br/><br/><br/>__________________________</td>
+                        <td width="33%"><br/><br/><br/>__________________________</td>
+                        <td width="33%"><br/><br/><br/>__________________________</td>
+                    </tr>
+                    <tr class="text-center">
+                        <td>Registrado por</td>
+                        <td>Fecha</td>
+                        <td>Revisado por</td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+
+        <t t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+            <div class="rounded2">
+                <p>Puede realizar transferencias o depósitos mediante las siguientes Cuentas Bancarias de Agro Fadaca S.A.:</p>
+                <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="50%">
+                            <p style="font-size:18px;">
+                              <strong>BANCO NACIONAL COLONES</strong><br/>
+                               Cuenta: 100-01-170-000273-9<br/>
+                               CC: 15117010010002732
+                            </p>
+                        </td>
+                        <td>
+                            <p style="font-size:18px;">
+                              <strong>BANCO NACIONAL DOLARES</strong><br/>
+                               Cuenta: 100-02-170-000041-3<br/>
+                               CC: 15117010020000415
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <p><strong>CONFIRMACIONES:</strong> Para enviar confirmaciones de depósito    Correo:   credito@agrofadaca.co.cr</p>
+            </div>
+            <div class="row">
+                <div class="col-xs-12"><p style="padding:2px 2px 2px 2px">AUTORIZADO MEDIANTE OFICIO No.01-0068-97 DEL 26-09-97 DE LA D.G.T.D. // Usuario:<span t-field="o.create_uid.name"/></p></div>
+                <!--div class="col-xs-4">  tr-cls
+                   <p style="padding:2px;font-weight:400;font-size:14px!important;color:#000000"> <span style="color:#FF0000">•ORIGINAL</span>  CLIENTE   CONTABILIDAD   ARCHIVO</p>
+                </div>
+                <div class="col-xs-3 mt0"><h4 style="float:right;color:#FF0000;font-weight:bolder; padding-right:5px;margin-top:0px">No. <span t-esc="o.number or ''"/></h4></div-->
+            </div> 
+        </t>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+        <style type="text/css">
+            <![CDATA[
+                body {
+                    font-family: 'Droid Sans', Arial, sans-serif;
+                    font-size:14px;
+                }
+            ]]>
+            .tble-wrapper {
+            width: 100%;
+            padding: 2px;
+            -webkit-border-radius: 5px;
+            -o-border-radius: 5px;
+            -khtml-border-radius: 5px;
+            border-radius: 5px;
+            }
+            .tble-wrapper .tble {
+            width: 100%;
+            }
+            .tble-header {
+            height: 35px;
+            font-size: 14px;
+            text-align: center;
+            line-height: 34px;
+            text-decoration: none;
+            font-weight: bold;
+            }
+            .tble-row td {
+            font-size: 14px;
+            font-weight: normal;
+            color: #222;
+            height: 18px;
+            padding: 5px 2px 5px 2px;
+            border-left: 1px solid #666;
+            }
+            .tble tr th {
+            padding:2px 2px;
+            }
+            .br {
+            border-right: 1px solid #666;
+            }
+            .bl{
+            border-left: 1px solid #666;
+            }
+            .bt{
+            border-top: 1px solid #666;
+            }
+            .box{
+              border:1px solid #222 !important;
+              border-width : 1px 1px 1px 1px;
+              padding:2px 2px !important;
+              text-align:center;
+            }
+
+            .boxsq{
+              border:solid #333 !important;
+              border-width:1px 1px 1px 1px !important;
+            }
+
+            .boxsq2{
+              border:solid #333 !important;
+              border-width:1px 1px 0px 1px !important;
+            }
+
+            .brl{
+              border-style: solid!important;
+              border-width: 0px 0px 0px 1px!important;
+            }
+            .bb{
+              border-style: solid!important;
+              border-width: 0px 0px 1px 0px!important;      
+            }
+            .rcorners2{
+              border-radius: 5px;
+              border: 1px solid #333;
+              padding:5px 5px 5px 5px;
+              font-size: 16px;
+            }
+            .rounded1{
+              color:#fff;
+              border-radius: 8px;
+              border:none;
+              padding:5px 5px;
+              background: #222;
+            }
+            .rounded2{
+              border-radius: 8px;
+              border: 1px solid #ddd;
+              padding:5px 5px;
+            }
+            .total {
+              vertical-align:middle;
+              border:1px solid #333;
+              border-radius: 5px;
+            }
+            .title{
+            color:#222222;
+            font-size:14px;
+            font-weight:bolder;
+            }
+            .dtheader{
+            border:none;
+            padding:5px 5px;
+            }
+            .dtcls{
+            padding:5px 5px;
+            border-style: solid!important;
+            border-width: 0px 0px 1px 0px!important;      
+            }
+            .dtbg{
+            margin:5px 5px; 
+            }
+            .bg-title{
+            background-color:#dddddd;
+            }
+            .bg-img{ positiont:relative; background:url("web/static/src/img/watermark.jpg") bottom center;background-size: 70% 70%; background-repeat: no-repeat;}
+        </style>
+    </div>
+</template>
+
+<template id="account.report_invoice">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'account.report_invoice_document')"/>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>
+
+
+

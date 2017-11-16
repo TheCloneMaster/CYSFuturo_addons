@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_task_form2_invoice_inherited">
+            <field name="name">project.task.form.invoice.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited" />
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+            <field name="arch" type="xml">
+                <field name="unit_amount" position="before">
+                    <field name="product_id"/>
+                    <field name="unit_cost"/>
+                </field>
+                <field name="unit_amount" position="after">
+                    <field name="total_cost"/>
+                    <field name="billable"/>
+                    <field name="invoiced"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

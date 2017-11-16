@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_task_invoice_form" model="ir.ui.view">
+        <field name="name">project.task.invoice.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position='replace'/>
+            <field name="project_id" position='before'>
+                <field name="partner_id"/>
+                <field name="pricelist_id"/>
+            </field>
+            <field name="project_id" position='attributes'>
+                <attribute name='invisible'>1</attribute>
+            </field>
+            <field name="tag_ids" position='attributes'>
+                <attribute name='string'>Tipo de servicio</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>
+

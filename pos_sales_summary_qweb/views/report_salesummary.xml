@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_salesummary">
+    <t t-call="report.html_container">
+    <t t-call="report.internal_layout">
+        <div class="page">
+
+            <div class="text-center">
+                <h2>CIERRE DE VENTAS</h2>
+
+                <strong><t t-esc="date_start" t-options="{'widget': 'datetime'}"/> - <t t-esc="date_stop" t-options="{'widget': 'datetime'}"/></strong>
+            </div>
+
+            <t t-if="show_details">
+                <h3>Ventas POS</h3>
+                <table class="table table-condensed">
+                    <thead>
+                        <th><strong>Fecha</strong></th>
+                        <th><strong>No.Factura</strong></th>
+                        <th><strong>Cliente</strong></th>
+                        <th class="text-right"><strong>Subtotal</strong></th>
+                        <th class="text-right"><strong>I.V.</strong></th>
+                        <th class="text-right"><strong>Total</strong></th>
+                        <th><strong>Estado</strong></th>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="orders" t-as="line_ids">
+                            <td>
+                                <span t-esc="line_ids['date_order']" t-options="{'widget': 'datetime'}"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['pos_name']"/>
+                                <!--t t-foreach="line_ids['lines']" t-as="order_line">
+                                    <br/><span t-esc="order_line.product_id.name"/><t t-if="order_line.note"> - <span t-esc="order_line.note"/> </t>
+                                </t-->
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['customer_name']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="line_ids['subtotal']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="line_ids['tax']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="line_ids['total']"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['state']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>TOTAL VENTAS POS</strong>
+                            </td>
+                            <td>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="subtotal"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="tax"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="total_paid"/>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+
+            <!-- Orderlines >
+            <h3>Products</h3>
+            <table  class="table table-condensed">
+                <thead><tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price Unit</th>
+                </tr></thead>
+                <tbody>
+                <tr t-foreach='products' t-as='line'>
+                    <td><t t-esc="line['product_name']" /></td>
+                    <td>
+                        <t t-esc="line['quantity']" />
+                        <t t-if='line["uom"] != "Unit(s)"'>
+                            <t t-esc='line["uom"]' /> 
+                        </t>
+                    </td>
+                    <td>
+                        <t t-esc='line["price_unit"]' />
+                    <t t-if='line["discount"] != 0'>
+                        Disc: <t t-esc='line["discount"]' />%
+                    </t>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <br/-->
+
+            <h3>Payments</h3>
+            <table  class="table table-condensed">
+                <thead><tr>
+                    <th>Name</th>
+                    <th>Total</th>
+                </tr></thead>
+                <tbody>
+                <tr t-foreach='payments' t-as='payment'>
+                    <td><t t-esc="payment['name']" /></td>
+                    <td><t t-esc="payment['total']" /></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <h3>Taxes</h3>
+            <table  class="table table-condensed">
+                <thead><tr>
+                    <th>Name</th>
+                    <th>Total</th>
+                </tr></thead>
+                <tbody>
+                <tr t-foreach='taxes' t-as='tax'>
+                    <td><t t-esc="tax['name']" /></td>
+                    <td><t t-esc="tax['total']" /></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br/>
+            <br/>
+
+            <strong>Total: <t t-esc='total_paid'/></strong>
+
+        </div>
+    </t>
+    </t>
+</template>
+</data>
+</openerp>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2014 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+<openerp>
+    <data>
+        <!-- actions -->
+        <record id="action_rule" model="ir.actions.act_window">
+            <field name="name">Commission Rules</field>
+            <field name="res_model">sale.commission.rule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_commission" model="ir.actions.act_window">
+            <field name="name">Commissions</field>
+            <field name="res_model">sale.commission.commission</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_commission_search"/>
+        </record>
+
+        <record id="action_commission_summary" model="ir.actions.act_window">
+            <field name="name">Commissions Summary</field>
+            <field name="res_model">sale.commission.summary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_commission_summary_search"/>
+        </record>
+
+        <!-- menuitems -->
+        <menuitem id="menu_rule"
+            parent="base.menu_base_config"
+            name="Commission Rules"
+            action="action_rule"
+            sequence="30"/>
+
+        <menuitem id="menu_commission"
+            parent="base.menu_sales"
+            name="Commissions"
+            action="action_commission"
+            sequence="15"/>
+
+        <menuitem id="menu_commission_summary"
+            parent="base.menu_sales"
+            name="Commissions Summary"
+            action="action_commission_summary"
+            sequence="15"/>
+    </data>
+</openerp>

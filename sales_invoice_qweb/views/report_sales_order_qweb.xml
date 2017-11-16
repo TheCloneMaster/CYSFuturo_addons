@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="sale.report_saleorder">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="sale.report_saleorder_document" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+<template id="sale_stock.report_saleorder_document_inherit_sale_stock" inherit_id="sale.report_saleorder_document">
+</template>
+
+
+<template id="sale.report_saleorder_document">
+    <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+
+    <div class="header">
+        <table style="width:100%" class="mt32 mb35 table-condensed">
+          <tr>
+            <td width="30%">
+              <img  t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height:155px;"/>
+            </td>
+            <td width="50%">
+                <span class="title"><t t-esc="o.company_id.company_registry"/></span><br/>  
+                Cédula Jurídica <t t-esc="o.company_id.vat"/><br/>
+                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                <span>Tel.</span> <t t-esc="o.company_id.phone"/><br/>
+                <span>Email:</span> <t t-esc="o.company_id.email"/><br/>
+                <t t-esc="o.company_id.website"/><br/><br/>                   
+            </td>
+            <td width="20%">
+              <div class="text-left">
+                  <h2><span style="font-weight:bolder;font-size:22px" t-if="o.state not in ['draft','sent']">Orden de Pedido</span>
+                    <span style="font-weight:bolder;font-size:20px" t-if="o.state in ['draft','sent']">Proforma</span><br/>
+                    <span style="font-weight:bolder;font-size:20px">No. <span t-esc="o.name or '00001'"/></span>
+                  </h2>
+              </div>
+              <div class="text-center">
+                <table style="width:90%;" class="dtheader rounded2">
+                  <tr>
+                    <td class="text-center">DÍA</td>
+                    <td class="text-center">MES</td>
+                    <td class="text-center">AÑO</td>
+                  </tr>
+                  <tr>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_order and (o.date_order[8:10]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_order and (o.date_order[5:7]) or ''"/></td>
+                    <td class="dtcls text-center dtbg"><span t-esc="o.date_order and (o.date_order[0:4]) or ''"/></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+        <style type="text/css">
+            <![CDATA[
+                body {
+                    font-family: 'Droid Sans', Arial, sans-serif;
+                    font-size:16px;
+
+                }
+            ]]>
+            .title{
+            color:#222222;
+            font-size:24px;
+            font-weight:bolder;
+            }
+            .rounded2{
+              border-radius: 8px;
+              border: 1px solid;
+              padding:5px 5px;
+            }
+            .dtheader{
+              border: 1px solid;
+              padding:5px 5px;
+            }
+            .dtcls{
+              width:33.33%;
+              padding:5px 5px;
+              border: 1px solid;
+            }
+            .dtbg{
+            margin:5px 5px; 
+            }
+        </style>
+    </div><!---//end header-->
+    <div class="page" style="height:190mm;width:100%">
+        <div class="bg-img">
+            <table style="width:100%" class="mt30 mb30 table-condensed rcorners2">
+              <tr >
+                <td width="45%">
+                        <strong>CLIENTE:</strong> <span t-field="o.partner_id.name"/><br/>
+                        <strong>DIRECCIÓN:</strong> <span t-field="o.partner_id.street"/>
+                </td>
+                <td width="25%">
+                    <strong>TELÉFONO:</strong> <span t-field="o.partner_id.phone"/>
+                </td>
+                <td width="30%">
+                    <strong>CÓD. CLIENTE:</strong><span t-field="o.partner_id.ref"/><br/>
+                    <strong >REFERENCIA:</strong><span t-field="o.client_order_ref"/>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                        <strong>VENDEDOR:</strong> <span t-field="o.user_id.name"/>
+                </td>
+                <div name="payment_term" t-if="o.payment_term_id" class="col-xs-3">
+                    <td>
+                            <strong>COND. DE PAGO:</strong> <span t-esc="o.payment_term_id and o.payment_term_id.name or 'CONTADO'"/>
+                    </td>
+                </div>
+
+              </tr>
+            </table>
+            <br/>
+            <!--<div class="oe_structure"/>
+            <table>
+                <tr width="100%">
+                    <td width="40%">
+
+                    </td>
+                    <td width="20%">
+                        <t t-if="o.client_order_ref" >
+                            <strong>Referencia:</strong>
+                            <p t-field="o.reference"/>
+                        </t>
+                    </td>
+                    <td width="40%">
+
+                    </td>
+                </tr>
+            </table>
+            <br/>-->
+            <!-- Is there a discount on at least one line? -->
+            <t t-set="display_discount" t-value="any([l.discount for l in o.order_line])"/>
+
+            <t t-foreach="o.order_lines_layouted()" t-as="page">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Unit Price</th>
+                            <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
+                            <th class="text-right">Taxes</th>
+                            <th class="text-right" groups="sale.group_show_price_subtotal">Price</th>
+                            <th class="text-right price_tax_included" groups="sale.group_show_price_total">Total Price</th>
+                        </tr>
+                   </thead>
+                   <tbody class="sale_tbody">
+                        <t t-foreach="page" t-as="layout_category">
+
+                            <t t-if="layout_category_size &gt; 1 or page_size &gt; 1" groups="sale.group_sale_layout">
+                                <tr class="active">
+                                    <td colspan="7" style="font-weight: bold; border-bottom: 1px solid black;">&amp;bull;
+                                        <t t-esc="layout_category['name']"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                            <!-- Lines associated -->
+                            <t t-foreach="layout_category['lines']" t-as="l">
+                                <tr>
+                                    <td><span t-field="l.name"/></td>
+                                    <td class="text-right">
+                                        <span t-field="l.product_uom_qty"/>
+                                        <span t-field="l.product_uom" groups="product.group_uom"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_unit"/>
+                                    </td>
+                                    <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_id))"/>
+                                    </td>
+                                    <td class="text-right" groups="sale.group_show_price_subtotal">
+                                        <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+                                    </td>
+                                    <td class="text-right" groups="sale.group_show_price_total">
+                                        <span t-field="l.price_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                            <t t-if="(layout_category_size &gt; 1 or page_size &gt; 1) and layout_category['subtotal']" groups="sale.group_sale_layout">
+                                <tr class="text-right">
+                                    <td colspan="6">
+                                        <strong>Subtotal: </strong>
+                                        <t t-set="subtotal" t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                        <span t-esc="subtotal" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </t>
+                    </tbody>
+                </table>
+
+                <t t-if="page_index &lt; page_size - 1" groups="sale.group_sale_layout">
+                    <p style="page-break-before:always;"> </p>
+                </t>
+            </t>
+            <br/>
+            <!--Tabla Totales-->
+            <!--table class="table table-condensed" width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="rounded2">
+                        <th style="width:60%" class="text-left">
+                            <p style="font-family:Helvetica;padding:5px;font-weight:bolder;font-size:10px!important">ESTE ES UN DOCUMENTO DE PROFORMA, NO REPRESENTA UNA FACTURA FORMAL.
+                            </p>
+                        </th>
+                        <th style="width:20%" class="bgcolor text-right">
+                            <div style="padding:2px 2px;float:right;text-align:right;">
+                                SUBTOTAL
+                                <br/> DESCUENTO
+                                <br/> IMP.VENTAS
+                                <br/><strong>T O T A L</strong>
+                            </div>
+                        </th>
+                        <th style="width:20%;" class="bgcolor text-right">
+                            <div style="padding:2px 2px; text-align:right;">
+                                <t t-set="subtotal" t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                <span t-esc="subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
+                                <br/>
+                                <span t-field="o.currency_id.symbol" />
+                                <t t-esc="'{0:,.2f}'.format(int(sum([ (line.product_uom_qty*line.price_unit-line.price_subtotal) for line in o.order_line ])))" />
+                                <br/>
+                                <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
+                                <br/>
+                                <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table-->
+            <div class="row" name="total">
+                <div class="col-xs-8">
+                    <t t-if="o.note" >
+                        <hr/>
+                        <strong>Nota:</strong> <p t-field="o.note" />
+                    <hr/>
+                    </t>
+                </div>
+                <div class="col-xs-4">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td><strong>Total Without Taxes</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+                            </td>
+                        </tr>
+                        <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+                            <tr>
+                                <td><span t-esc="amount_by_group[0] or 'Taxes'"/></td>
+                                <td class="text-right">
+                                    <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr class="border-black">
+                            <td><strong>Total</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="oe_structure" />
+            <div class="rounded2">
+                <p>Puede realizar transferencias o depósitos mediante las siguientes Cuentas Bancarias de Agro Fadaca S.A.:</p>
+                <table width="100%;" class="table-condensed" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="50%">
+                            <p style="font-size:18px;">
+                              <strong>BANCO NACIONAL COLONES</strong><br/>
+                               Cuenta: 100-01-170-000273-9<br/>
+                               CC: 15117010010002732
+                            </p>
+                        </td>
+                        <td>
+                            <p style="font-size:18px;">
+                              <strong>BANCO NACIONAL DOLARES</strong><br/>
+                               Cuenta: 100-02-170-000041-3<br/>
+                               CC: 15117010020000415
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <p><strong>CONFIRMACIONES:</strong> Para enviar confirmaciones de depósito    Correo:   credito@agrofadaca.co.cr</p>
+            </div>
+        </div>
+        <!--end bg-img -->
+        <style>
+        .bgcolor {
+            background-color: #eeeeee;
+            border: 1px solid #dfdfdf;
+        }
+        
+        .rounded2 {
+            border-radius: 8px;
+            border: 1px solid #dfdfdf;
+            padding: 5px 5px;
+        }
+        
+        </style>
+    </div>
+</template>
+</data>
+</openerp>

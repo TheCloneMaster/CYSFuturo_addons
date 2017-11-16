@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_summary_wizard" model="ir.ui.view">
+        <field name="name">pos.summary.wizard.form</field>
+        <field name="model">pos.summary.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sale Summary">
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <group>
+                    <field name="show_details"/>
+                    <field name="pos_config_ids" colspan="4" nolabel="1" />
+                </group>
+                <footer>
+                    <button name="generate_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_summary_report" model="ir.actions.report.xml">
+        <field name="name">Sale Summary</field>
+        <field name="model">report.point_of_sale.summary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pos_sales_summary_qweb.report_salesummary</field>
+    </record>
+
+    <record id="action_report_pos_summary" model="ir.actions.act_window">
+        <field name="name">Sale Summary</field>
+        <field name="res_model">pos.summary.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_report_order_summary" name="Sale Summary" action="action_report_pos_summary" parent="menu_point_rep" sequence="4"/>
+
+</odoo>
+
+
+

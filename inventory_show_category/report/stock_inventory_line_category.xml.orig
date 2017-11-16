@@ -1,0 +1,32 @@
+<openerp>
+    <data>
+        <!-- Inherit stock inventory report (from module stock) -->
+        <template id="report_inventory_line_category" inherit_id="stock.report_inventory">
+	    <!-- Finds the first table with as class table table-condensed and gives the ability to modify it
+		 This will replace everything withing tr (including tr)-->
+	        <xpath expr="//table[@class='table table-condensed'][2]//thead//tr//th[4]" position="replace">
+	        </xpath>
+	        <xpath expr="//table[@class='table table-condensed'][2]//thead//tr//th[3]" position="replace">
+	        </xpath>
+	        <xpath expr="//table[@class='table table-condensed'][2]//thead//tr//th" position="before">
+                            <th><strong>Category</strong></th>
+	        </xpath>
+	        
+	        <xpath expr="//table[@class='table table-condensed'][2]//tr//td[5]" position="replace">
+                <td class="text-right"><span t-if="line.product_qty" t-field="line.product_qty"/> <span t-if="line.product_qty" t-field="line.product_uom_id" groups="product.group_uom"/></td>
+	        </xpath>
+	        <xpath expr="//table[@class='table table-condensed'][2]//tr//td[4]" position="replace">
+	        </xpath>
+	        <xpath expr="//table[@class='table table-condensed'][2]//tr//td[3]" position="replace">
+	        </xpath>
+	        <xpath expr="//table[@class='table table-condensed'][2]//tr//td" position="before">
+                            <td><span t-field="line.product_categ_id"/></td>
+	        </xpath>
+        </template>
+    </data>
+</openerp>
+
+
+
+
+
