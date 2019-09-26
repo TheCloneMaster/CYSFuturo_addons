@@ -13,10 +13,10 @@ class PartnerElectronic(models.Model):
     company_type_tracasa = fields.Char(required=False, copy=False, index=True)
 
     company_type = fields.Selection(string='Company Type',
-                                    selection=[('person', 'Individual'), ('company', 'Compañia'), ('bus', 'Buses'),
+                                    selection=[('person', 'Individual'), ('company', 'Compañía'), ('bus', 'Buses'),
                                                ('cashier', 'Cajero'), ('driver', 'Chofer'),
                                                ('external', 'Cliente Externo'),('departament', 'Departamento'),
-                                               ('vehicle', 'Vehiculo')])
+                                               ('vehicle', 'Vehículo')])
 
     @api.depends('is_company')
     def _compute_company_type(self):

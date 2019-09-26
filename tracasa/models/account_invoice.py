@@ -19,11 +19,10 @@ class AccountInvoiceElectronic(models.Model):
     schedule = fields.Char(string="Horario", required=False, copy=False, index=True)
     inf_send = fields.Char(string="Envia", required=False, copy=False, index=True)
     inf_for = fields.Char(string="Para", required=False, copy=False, index=True)
-    inf_dni = fields.Char(string="Cedula", required=False, copy=False, index=True)
-    destination = fields.Char(string="Destino", required=False, copy=False, index=True)
-    invoice_code = fields.Char(string="Codigo Factura", required=False, copy=False, index=True)
+    inf_dni = fields.Char(string="Cédula", required=False, copy=False, index=True)
+    invoice_code = fields.Char(string="Código Factura", required=False, copy=False, index=True)
     period_to = fields.Char(string="Del Periodo Del", required=False, copy=False, index=True)
-    share_days = fields.Char(string="Dias Compartidos", required=False, copy=False, index=True)
+    share_days = fields.Char(string="Días Compartidos", required=False, copy=False, index=True)
     invoice_details = fields.Char(string="Detalle Factura", required=False, copy=False, index=True)
     departure_hour = fields.Char(string="Hora de Salida", required=False, copy=False, index=True)
     amount_buses = fields.Char(string="Cantidad de Buses", required=False, copy=False, index=True)
@@ -39,9 +38,14 @@ class AccountInvoiceElectronic(models.Model):
     departure_place = fields.Char(string="Lugar de Salida", required=False, copy=False, index=True)
 
     @api.model
-    def create(self, vals):
-        invoice = super(AccountInvoiceElectronic, self).create(vals)
-        return invoice
+    def _default_partner_id(self):
+        if self.env.user.partner_id.company_type_tracasa == 'cashier':
+            return self.env.user.partner_id
+
+    partner_id = fields.Many2one(default=_default_partner_id)
+
+
+
 
 
 
