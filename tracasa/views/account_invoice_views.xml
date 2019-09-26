@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="invoice_addinfo_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <!--<xpath expr="(//field[@name='partner_id'])" position="replace">
+                    <field name="partner_id" groups="base.group_user" string="Customer"/> attrs="{'invisible':[('state_tributacion','=', False)]}"/>
+                 </xpath>-->
+                 <xpath expr="//page[@name='other_info']" position="after">
+                     <page string="Informacion Adicional">
+                        <group>
+                            <group>
+                                <field name="plate_number"/>
+                                <field name="schedule"/>
+                                <field name="inf_send"/>
+                                <field name="inf_for"/>
+                                <field name="inf_dni"/>
+                                <field name="destination"/>
+                                <field name="invoice_code"/>
+                                <field name="period_to"/>
+                                <field name="share_days"/>
+                                <field name="invoice_details"/>
+                                <field name="departure_hour"/>
+                            </group>
+                            <group>
+                                <field name="amount_buses"/>
+                                <field name="amount_passengers"/>
+                                <field name="departure_date"/>
+                                <field name="contract_date"/>
+                                <field name="sign_place"/>
+                                <field name="balance_money"/>
+                                <field name="advance_money"/>
+                                <field name="return_hour"/>
+                                <field name="destination_service"/>
+                                <field name="contact_phone"/>
+                                <field name="departure_place"/>
+                            </group>
+                        </group>
+                     </page>
+                 </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
