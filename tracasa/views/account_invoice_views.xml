@@ -10,6 +10,21 @@
                 <field name="partner_id" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </field>
+                <field name="tipo_documento" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="economic_activity_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="payment_term_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="payment_methods_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="team_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
             </field>
         </record>
         <record id="invoice_addinfo_inherit" model="ir.ui.view">
@@ -17,37 +32,40 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
                 <field name="arch" type="xml">
-                 <xpath expr="//page[@name='other_info']" position="after">
-                     <page string="Informacion Adicional">
-                        <group>
+                     <xpath expr="//field[@name='team_id']" position="after">
+                         <field name="plate_number"/>
+                         <field name="hour_service"/>
+                     </xpath>
+                     <xpath expr="//page[@name='other_info']" position="after">
+                         <page string="Informacion Adicional">
                             <group>
-                                <field name="plate_number"/>
-                                <field name="schedule"/>
-                                <field name="inf_send"/>
-                                <field name="inf_for"/>
-                                <field name="inf_dni"/>
-                                <field name="period_to"/>
-                                <field name="share_days"/>
-                                <field name="departure_hour"/>
-                                <field name="departure_date"/>
-                                <field name="return_hour"/>
-                                <field name="destination_service"/>
-                                <field name="departure_place"/>
+                                <group>
+                                    <field name="schedule"/>
+                                    <field name="inf_send"/>
+                                    <field name="inf_for"/>
+                                    <field name="inf_dni"/>
+                                    <field name="period_to"/>
+                                    <field name="share_days"/>
+                                    <field name="departure_hour"/>
+                                    <field name="departure_date"/>
+                                    <field name="return_hour"/>
+                                    <field name="destination_service"/>
+                                    <field name="departure_place"/>
+                                </group>
+                                <group>
+                                    <field name="amount_buses"/>
+                                    <field name="amount_passengers"/>
+                                    <field name="contract_date"/>
+                                    <field name="sign_place"/>
+                                    <field name="invoice_code"/>
+                                    <field name="invoice_details"/>
+                                    <field name="balance_money"/>
+                                    <field name="advance_money"/>
+                                    <field name="contact_phone"/>
+                                </group>
                             </group>
-                            <group>
-                                <field name="amount_buses"/>
-                                <field name="amount_passengers"/>
-                                <field name="contract_date"/>
-                                <field name="sign_place"/>
-                                <field name="invoice_code"/>
-                                <field name="invoice_details"/>
-                                <field name="balance_money"/>
-                                <field name="advance_money"/>
-                                <field name="contact_phone"/>
-                            </group>
-                        </group>
-                     </page>
-                 </xpath>
+                         </page>
+                     </xpath>
             </field>
         </record>
     </data>
