@@ -9,22 +9,32 @@
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
                 <field name="tipo_documento" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
                 <field name="economic_activity_id" position="attributes">
                     <attribute name="invisible">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
                 <field name="payment_term_id" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
                 <field name="payment_methods_id" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
                 <field name="team_id" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </field>
+                <xpath expr="//field[@name='team_id']" position="after">
+                     <field name="plate_number"/>
+                     <field name="hour_service"/>
+                </xpath>
             </field>
         </record>
         <record id="invoice_addinfo_inherit" model="ir.ui.view">
@@ -32,14 +42,11 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
                 <field name="arch" type="xml">
-                     <xpath expr="//field[@name='team_id']" position="after">
-                         <field name="plate_number"/>
-                         <field name="hour_service"/>
-                     </xpath>
                      <xpath expr="//page[@name='other_info']" position="after">
                          <page string="Informacion Adicional">
                             <group>
                                 <group>
+                                    <field name="plate"/>
                                     <field name="schedule"/>
                                     <field name="inf_send"/>
                                     <field name="inf_for"/>

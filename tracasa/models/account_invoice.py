@@ -16,6 +16,7 @@ class AccountInvoiceElectronic(models.Model):
     _inherit = "account.invoice"
 
     plate_number = fields.Char(string="Placa", required=False, copy=False, index=True)
+    plate = fields.Char( string="Placa Vehiculo", required=False, copy=False, index=True)
     hour_service = fields.Char(string="Hora del Servicio", required=False, copy=False, index=True)
     schedule = fields.Char(string="Horario", required=False, copy=False, index=True)
     inf_send = fields.Char(string="Envia", required=False, copy=False, index=True)
